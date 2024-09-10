@@ -13,21 +13,28 @@
     </form>
     <div id="result"></div>
     <script>
-      document.getElementById('uploadForm').addEventListener('submit', (ev) => {
+    document.getElementById("uploadForm").addEventListener("submit", (ev) => {
         ev.preventDefault();
         const formData = new FormData(ev.target);
-        fetch('/upload', {
-          method: 'POST',
+        fetch("http://localhost:3001/upload", {
+          method: "POST",
+          mode: "no-cors",
           body: formData,
-        }).then(response => response.json())
-          .then(data => {
+        })
+          .then((response) => response.json())
+          .then((data) => {
             const filename = data.file;
-            fetch(`/file/${filename}`)
-              .then(response => response.json())
-              .then(data => document.getElementById('result').innerHTML = `<pre>${data.content.replace(/:/g, '+')}</pre>`)
-              .catch(error => console.error(error));
+            fetch(`http://localhost:3001/file/${filename}`)
+              .then((response) => response.json())
+              .then(
+                (data) =>
+                  (document.getElementById(
+                    "result"
+                  ).innerHTML = `<pre>${data.content.replace(/:/g, "+")}</pre>`)
+              )
+              .catch((error) => console.error(error));
           })
-          .catch(error => console.error(error));
+          .catch((error) => console.error(error));
       });
     </script>
   </body>

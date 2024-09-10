@@ -52,9 +52,14 @@ app.get('/file/:filename', (req, res) => {
 
 // Inicia el servidor en el puerto 3001.
 app.listen(3001, '0.0.0.0', () => {
-    console.log('Servidor corriendo en http://localhost:3001');
+    console.log('Servidor corriendo en http://localhost:3001/file/Blink.ino.hex');
   });
-
+app.get('/', (req, res) => {
+  res.redirect('/index.html');
+});
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 // Para que funcione en la web, debes seguir los siguientes pasos:
 // 1. Crea un archivo .html en la carpeta public y agrega un formulario con un input de tipo file.
 // 2. En el evento submit del formulario, haz una petición POST a la ruta '/upload' con el archivo adjunto.
