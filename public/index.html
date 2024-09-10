@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uploader de archivos hex</title>
+  </head>
+  <body>
+    <h1>Uploader de archivos hex</h1>
+    <form action="/upload" method="post" enctype="multipart/form-data" id="uploadForm">
+      <input type="file" name="hexfile">
+      <button type="submit">Subir</button>
+    </form>
+    <div id="result"></div>
+    <script>
+      document.getElementById('uploadForm').addEventListener('submit', (ev) => {
+        ev.preventDefault();
+        const formData = new FormData(ev.target);
+        fetch('/upload', {
+          method: 'POST',
+          body: formData,
+        }).then(response => response.json())
+          .then(data => {
+            const filename = data.file;
+            fetch(`/file/${filename}`)
+              .then(response => response.json())
+              .then(data => document.getElementById('result').innerHTML = `<pre>${data.content.replace(/:/g, '+')}</pre>`)
+              .catch(error => console.error(error));
+          })
+          .catch(error => console.error(error));
+      });
+    </script>
+  </body>
+</html>
+
